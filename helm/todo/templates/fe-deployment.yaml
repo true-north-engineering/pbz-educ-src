@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "todo.fullname" . }}-fe
+  labels:
+    {{- include "todo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.fe.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "todo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "todo.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.fe.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: frontend
+          image: "{{ .Values.fe.image.repository }}:{{ .Values.fe.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.fe.image.pullPolicy }}
+          env:
+            - name: REACT_APP_API_HOST
+              value: todo
+          ports:
+            - name: http
+              containerPort: {{ .Values.fe.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.fe.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.fe.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.fe.resources | nindent 12 }}
+          {{- with .Values.fe.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.fe.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,65 @@
+api:
+  replicaCount: 1
+  image:
+    repository: nexus-docker.ocp.hpb.tn.hr/todo-api
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+  imagePullSecrets:
+    - name: nexus-docker-auth
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route_path: /todo/api
+
+  livenessProbe:
+    tcpSocket:
+      port: 8080
+  readinessProbe:
+    tcpSocket:
+      port: 8080
+
+fe:
+  replicaCount: 1
+  image:
+    repository: nexus-docker.ocp.hpb.tn.hr/todo-frontend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+  imagePullSecrets:
+    - name: nexus-docker-auth
+
+  service:
+    type: ClusterIP
+    port: 3000
+
+  route_path: /
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 3000
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 3000
+
+route:
+  enabled: true
+  host: 
+
+mysql:
+  auth:
+    database: todo
+    username: todo
+    password: todopassw0rd
+    rootPassword: r00tpassw0rd
+  networkPolicy:
+    enabled: false
+  primary:
+    pdb:
+      create: false
+  serviceAccount:
+    create: false
