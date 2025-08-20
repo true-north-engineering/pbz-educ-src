@@ -1,7 +1,7 @@
 api:
   replicaCount: 1
   image:
-    repository: nexus-docker.ocp.hpb.tn.hr/todo-api
+    repository: nexus-docker.ocp.hpb.tn.hr/user0/todo-api
     pullPolicy: IfNotPresent
     tag: "latest"
 
@@ -24,7 +24,7 @@ api:
 fe:
   replicaCount: 1
   image:
-    repository: nexus-docker.ocp.hpb.tn.hr/todo-frontend
+    repository: nexus-docker.ocp.hpb.tn.hr/user0/todo-frontend
     pullPolicy: IfNotPresent
     tag: "latest"
 
