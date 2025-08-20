@@ -48,7 +48,7 @@ fe:
 
 route:
   enabled: true
-  host: 
+  host: todo-user0.ocp-edu.tn.hr
 
 mysql:
   auth:
