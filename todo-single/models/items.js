@@ -40,72 +40,62 @@ exports.create = function(description, done, callback) {
         done: (done) ? true : false
     }).then(function(item) {
         callback(null, item);
-    }).error(function(err) {
-        callback(err);
     });
 }
 
 exports.update = function(key, description, done, callback) {
-    Item.find({ where:{ id: key } }).then(function(item) {
+    Item.findAll({ where:{ id: key } }).then(function(item) {
         if (!item) {
             callback(new Error("Nothing found for key " + key));
         }
         else {
-            item.updateAttributes({
+            item[0].update({
                 description: description,
                 done: (done) ? true : false
             }).then(function() {
-                callback(null, item);
-            }).error(function(err) {
-                callback(err);
+                callback(null, item[0]);
             });
         }
-    }).error(function(err) {
-        callback(err);
     });
 }
 
 
 exports.read = function(key, callback) {
-    Item.find({ where:{ id: key } }).then(function(item) {
+    Item.findAll({ where:{ id: key } }).then(function(item) {
         if (!item) {
             callback(new Error("Nothing found for key " + key));
         }
         else {
             //XXX why recreating the item object?
             callback(null, {
-                id: item.id,
-                description: item.description,
-                done: item.done
+                id: item[0].id,
+                description: item[0].description,
+                done: item[0].done
             });
         }
-    }).error(function(err) {
-        callback(err);
     });
 }
 
 exports.destroy = function(key, callback) {
-    Item.find({ where:{ id: key } }).then(function(item) {
+    Item.findAll({ where:{ id: key } }).then(function(item) {
         if (!item) {
             callback(new Error("Nothing found for " + key));
         }
         else {
-            item.destroy().then(function() {
-                callback(null, item);
-            }).error(function(err) {
-                callback(err);
+            item[0].destroy().then(function() {
+                callback(null, item[0]);
             });
         }
-    }).error(function(err) {
-        callback(err);
     });
 }
 
 exports.countAll = function(callback) {
     Item.findAll({ attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'no_items']] } ).then(function(n) {
-        callback(null, n[0].get('no_items'));
-    }).error(function(err) {
-        callback(err);
+        if (n) {
+            callback(null, n[0].get('no_items'));
+        } else {
+            callback(null, 0);
+        }
     });
    //callback(null, 100);
 }
@@ -113,14 +103,14 @@ exports.countAll = function(callback) {
 exports.listAll = function(page, sortField, sortDirection, callback) {
     Item.findAll({ offset: 10 * (page - 1), limit: 10,  order: [[sortField, sortDirection]] }).then(function(items) {
         var theitems = [];
-        items.forEach(function(item) {
-            //XXX why recreating the item objects for theitems?
-            theitems.push({
-                id: item.id, description: item.description, done: item.done });
-        });
+        if (items) {
+            items.forEach(function(item) {
+                //XXX why recreating the item objects for theitems?
+                theitems.push({
+                    id: item.id, description: item.description, done: item.done });
+            });
+        }
         callback(null, theitems);
-    }).error(function(err) {
-        callback(err);
-    });
+    })
 }
 
