@@ -11,7 +11,7 @@ services:
     env_file:
       - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/${MYSQL_DATABASE}  # Database URL.
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-data:3306/${MYSQL_DATABASE}  # Database URL.
       - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}  # Database username.
       - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}  # Database password.
       - SPRING_CONFIG_LOCATION=file:/app/application.properties  # Location of application properties.
@@ -30,6 +30,12 @@ services:
       MYSQL_DATABASE: lab3
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - spring-lab3-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 5s
+      retries: 10
 
 volumes:
   mysql-data:
