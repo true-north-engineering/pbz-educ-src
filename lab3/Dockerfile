@@ -1,5 +1,5 @@
 # Use an official Java runtime as a parent image
-FROM amazoncorretto:21.0.4-alpine3.18
+FROM registry.access.redhat.com/ubi9/openjdk-21:1.20
 
 # Set the working directory in the container
 WORKDIR /app
