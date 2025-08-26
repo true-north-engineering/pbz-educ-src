@@ -1,3 +1,20 @@
+# ---- Build Stage ----
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy pom.xml and download dependencies first (better caching)
+COPY pom.xml .
+
+RUN mvn dependency:go-offline -B
+
+# Copy the source code
+COPY src ./src
+
+# Package the application (skip tests for faster build, optional)
+RUN mvn clean package -DskipTests
+
 # Use an official Java runtime as a parent image
 FROM registry.access.redhat.com/ubi9/openjdk-21:1.20
 
