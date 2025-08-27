@@ -5,13 +5,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      mysql-data:
-        condition: service_healthy
     env_file:
       - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-data:3306/${MYSQL_DATABASE}  # Database URL.
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${MYSQL_DATABASE}  # Database URL.
       - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}  # Database username.
       - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}  # Database password.
       - SPRING_CONFIG_LOCATION=file:/app/application.properties  # Location of application properties.
@@ -22,7 +19,6 @@ services:
 
   mysql-data:
     image: docker.io/library/mysql:8.0
-    container_name: lab3-database
     ports:
       - "3306:3306"
     environment:
@@ -32,10 +28,6 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - spring-lab3-network
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 5s
-      retries: 10
 
 volumes:
   mysql-data:

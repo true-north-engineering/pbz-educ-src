@@ -1,5 +1,5 @@
 # ---- Build Stage ----
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+FROM docker.io/library/maven:3.9.6-eclipse-temurin-21  AS builder
 
 # Set the working directory in the container
 WORKDIR /app
