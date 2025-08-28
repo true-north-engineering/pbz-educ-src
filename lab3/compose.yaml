@@ -5,10 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - mysql-data
     env_file:
       - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/${MYSQL_DATABASE}  # Database URL.
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-data:3306/${MYSQL_DATABASE}  # Database URL.
       - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}  # Database username.
       - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}  # Database password.
       - SPRING_CONFIG_LOCATION=file:/app/application.properties  # Location of application properties.
@@ -34,4 +36,4 @@ volumes:
 
 networks:
   spring-lab3-network:
-    name: spring-lab3-network
+    driver: bridge
