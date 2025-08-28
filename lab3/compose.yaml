@@ -1,5 +1,5 @@
 services:
-  spring-lab3-app:
+  spring-lab3-app-json:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,11 +9,24 @@ services:
       mysql-data:
         condition: service_healthy
 #    env_file:
-#      - .env
+#      - .env-json
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-data:3306/${MYSQL_DATABASE}  # Database URL.
-      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}  # Database username.
-      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}  # Database password.
+      - SPRING_CONFIG_LOCATION=file:/app/application.properties  # Location of application properties.
+    volumes:
+      - ./src/main/resources/application.properties:/app/application.properties
+
+  spring-lab3-app-non-json:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      mysql-data:
+        condition: service_healthy
+#    env_file:
+#      - .env-non-json
+    environment:
       - SPRING_CONFIG_LOCATION=file:/app/application.properties  # Location of application properties.
     volumes:
       - ./src/main/resources/application.properties:/app/application.properties
