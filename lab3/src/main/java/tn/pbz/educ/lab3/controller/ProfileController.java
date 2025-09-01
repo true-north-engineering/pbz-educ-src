@@ -9,10 +9,10 @@ import tn.pbz.educ.lab3.service.ProfileService;
 @AllArgsConstructor
 public class ProfileController {
 
-  private final ProfileService profileService;
+  /*private final ProfileService profileService;
 
   @GetMapping("/api/profile")
   public String getProfileMessage() {
     return profileService.getProfileMessage();
-  }
+  }*/
 }

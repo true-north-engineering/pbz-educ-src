@@ -1,36 +1,7 @@
 services:
-  spring-lab3-app-json:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      mysql-data:
-        condition: service_healthy
-    env_file:
-      - .env-json
-
-  spring-lab3-app-non-json:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-    depends_on:
-      mysql-data:
-        condition: service_healthy
-    env_file:
-      - .env-non-json
-
   mysql-data:
     image: docker.io/library/mysql:8.0
     container_name: lab3-database
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: labpassword
-      MYSQL_DATABASE: lab3
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
