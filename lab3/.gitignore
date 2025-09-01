@@ -19,7 +19,8 @@ target/
 *.iml
 *.ipr
 
-.env*
+.env-json
+.env-non-json
 
 ### NetBeans ###
 /nbproject/private/
