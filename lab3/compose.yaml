@@ -8,6 +8,13 @@ services:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 3s
       retries: 5
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root-pass
+      MYSQL_DATABASE: lab3-db
+      MYSQL_USERNAME: user
+      MYSQL_PASSWORD: password
 
 volumes:
   mysql-data:
