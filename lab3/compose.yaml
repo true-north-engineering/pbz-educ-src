@@ -2,6 +2,13 @@ services:
   mysql-data:
     image: docker.io/library/mysql:8.0
     container_name: lab3-database
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: labpassword
+      MYSQL_DATABASE: lab3
+      MYSQL_USERNAME: user
+      MYSQL_PASSWORD: password
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
